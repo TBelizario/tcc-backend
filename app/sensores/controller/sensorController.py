@@ -1,6 +1,7 @@
 from app.sensores.models.sensorModel import SensorModel
 from app.base.baseController import baseController
 from app.sensores.schemas.sensorSchema import SensorResponseLastDistance
+import requests
 
 
 class sensorController(baseController):
@@ -10,11 +11,15 @@ class sensorController(baseController):
     def add_sensor(self, request):
         request_dict = request.__dict__
 
-        sensor_db = self.db.query(self.main_model).filter(
-            self.main_model.ip == request_dict['ip']).first()
+        lat, lon = self.buscar_lat_lon(request_dict['address'], request_dict['city'])
 
+        sensor_db = self.db.query(self.main_model).filter(
+            self.main_model.ip == request_dict['ip']).filter(
+                self.main_model.nome == request_dict['nome']).first()
+        request_dict['latitude'] = lat
+        request_dict['logitude'] = lon
         if sensor_db:
-            for key, value in request.dict().items():
+            for key, value in request_dict.items():
                 setattr(sensor_db, key, value)
             self.db.commit()
             return sensor_db
@@ -43,7 +48,7 @@ class sensorController(baseController):
                              1: "green",
                              2: "yellow",
                              3: "red"}
-            if last_distance:
+            if last_distance and sensor.distance_layer:
                 for layer, value in sensor.distance_layer.items():
                     if last_distance <= value:
                         color_index = color_index + 1
@@ -51,6 +56,9 @@ class sensorController(baseController):
             list_response.append(SensorResponseLastDistance(
                 id=sensor.id,
                 ip=sensor.ip,
+                nome=sensor.nome,
+                address=sensor.address,
+                city=sensor.city,
                 logitude=sensor.logitude,
                 latitude=sensor.latitude,
                 active=sensor.active,
@@ -58,3 +66,11 @@ class sensorController(baseController):
                 color_icon=color_options[color_index],
                 last_distance=last_distance))
         return {"items": list_response}
+
+    def buscar_lat_lon(self, address, city):
+        url = f"https://nominatim.openstreetmap.org/search?q={address},%20{city}&format=json"
+        response = requests.get(url=url)
+        if response.status_code == 200:
+            response = response.json()[0]
+            return float(response['lat']), float(response['lon'])
+        return None, None

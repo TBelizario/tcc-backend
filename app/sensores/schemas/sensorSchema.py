@@ -7,6 +7,9 @@ class SensorResponse(BaseModel):
     ip: str
     logitude: float
     latitude: float
+    address: str
+    city: str
+    nome: str
     active: bool
     distance_layer: Optional[dict]
 
@@ -17,6 +20,9 @@ class SensorResponse(BaseModel):
 class SensorResponseLastDistance(BaseModel):
     id: int
     ip: str
+    nome: str
+    address: str
+    city: str
     logitude: float
     latitude: float
     active: bool
@@ -38,10 +44,9 @@ class SensorPaginationMaps(BaseModel):
 
 class SensorRequest(BaseModel):
     ip: str = Field(...)
-    logitude: float = Field(...)
-    latitude: float = Field(...)
-    active: bool = Field(...)
-    distance_layer: Optional[dict]
+    address: str = Field(...)
+    city: str = Field(...)
+    nome: str = Field(...)
 
 
 class SensorRequestPatch(BaseModel):
