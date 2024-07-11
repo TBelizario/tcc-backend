@@ -10,7 +10,7 @@ class sensorController(baseController):
 
     def add_sensor(self, request):
         request_dict = request.__dict__
-
+        
         lat, lon = self.buscar_lat_lon(request_dict['address'], request_dict['city'])
 
         sensor_db = self.db.query(self.main_model).filter(
@@ -69,8 +69,11 @@ class sensorController(baseController):
 
     def buscar_lat_lon(self, address, city):
         try:
-            url = f"https://nominatim.openstreetmap.org/search?q={address},%20{city}&format=json"
-            response = requests.get(url=url)
+            headers = {
+                'User-Agent': 'TCC_APP/1.0 Faculdade Uninter Thiago Belizario'
+            }
+            url = f"http://nominatim.openstreetmap.org/search?q={address}, {city}&format=json"
+            response = requests.get(url=url, headers=headers)
             if response.status_code == 200:
                 response = response.json()[0]
                 return float(response['lat']), float(response['lon'])
