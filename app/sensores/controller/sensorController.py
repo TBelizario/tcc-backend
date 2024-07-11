@@ -68,9 +68,13 @@ class sensorController(baseController):
         return {"items": list_response}
 
     def buscar_lat_lon(self, address, city):
-        url = f"https://nominatim.openstreetmap.org/search?q={address},%20{city}&format=json"
-        response = requests.get(url=url)
-        if response.status_code == 200:
-            response = response.json()[0]
-            return float(response['lat']), float(response['lon'])
-        return None, None
+        try:
+            url = f"https://nominatim.openstreetmap.org/search?q={address},%20{city}&format=json"
+            response = requests.get(url=url)
+            if response.status_code == 200:
+                response = response.json()[0]
+                return float(response['lat']), float(response['lon'])
+            return None, None
+        except Exception as err:
+            print(err)
+            return 0, 0
