@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, Field, Json
 from typing import List, Optional
 
@@ -29,6 +30,7 @@ class SensorResponseLastDistance(BaseModel):
     distance_layer: Optional[dict]
     color_icon: str
     last_distance: float
+    data_ocorrencia: datetime
 
     class Config:
         from_attributes = True

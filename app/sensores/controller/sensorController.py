@@ -54,6 +54,7 @@ class sensorController(baseController):
                         color_index = color_index + 1
 
             list_response.append(SensorResponseLastDistance(
+                data_insert=sensor.date_insert,
                 id=sensor.id,
                 ip=sensor.ip,
                 nome=sensor.nome,
@@ -64,7 +65,8 @@ class sensorController(baseController):
                 active=sensor.active,
                 distance_layer=sensor.distance_layer,
                 color_icon=color_options[color_index],
-                last_distance=last_distance))
+                last_distance=last_distance,
+                data_ocorrencia=sensor.leituras[-1].data_ocorrencia))
         return {"items": list_response}
 
     def buscar_lat_lon(self, address, city):
