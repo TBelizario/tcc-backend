@@ -1,3 +1,4 @@
+import datetime
 from app.sensores.models.sensorModel import SensorModel
 from app.base.baseController import baseController
 from app.sensores.schemas.sensorSchema import SensorResponseLastDistance
@@ -41,8 +42,13 @@ class sensorController(baseController):
         sensores = self.db.query(self.main_model).all()
         list_response = []
         for sensor in sensores:
-
             last_distance = sensor.leituras[-1].valor if sensor.leituras else 0
+            
+            data_ocorrencia = datetime.datetime.now()
+            
+            if last_distance:
+                data_ocorrencia = sensor.leituras[-1].data_ocorrencia
+                
             color_index = 0
             color_options = {0: "blue",
                              1: "green",
@@ -66,7 +72,7 @@ class sensorController(baseController):
                 distance_layer=sensor.distance_layer,
                 color_icon=color_options[color_index],
                 last_distance=last_distance,
-                data_ocorrencia=sensor.leituras[-1].data_ocorrencia))
+                data_ocorrencia=data_ocorrencia))
         return {"items": list_response}
 
     def buscar_lat_lon(self, address, city):
