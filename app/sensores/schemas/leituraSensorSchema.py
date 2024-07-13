@@ -22,5 +22,4 @@ class LeituraSensorPaginationResponse(BaseModel):
 
 class LeituraSensorRequest(BaseModel):
     sensor_id: int = Field(...)
-    data_ocorrencia: datetime = Field(...)
     valor: float = Field(...)
