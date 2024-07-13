@@ -55,3 +55,4 @@ class SensorRequestPatch(BaseModel):
     baixo: Optional[float]
     medio: Optional[float]
     alta: Optional[float]
+    active: Optional[bool]

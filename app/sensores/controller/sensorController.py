@@ -11,7 +11,7 @@ class sensorController(baseController):
 
     def add_sensor(self, request):
         request_dict = request.__dict__
-        
+
         lat, lon = self.buscar_lat_lon(request_dict['address'], request_dict['city'])
 
         sensor_db = self.db.query(self.main_model).filter(
