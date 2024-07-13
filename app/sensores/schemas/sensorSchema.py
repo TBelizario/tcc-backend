@@ -49,10 +49,10 @@ class SensorRequest(BaseModel):
     address: str = Field(...)
     city: str = Field(...)
     nome: str = Field(...)
+    active: Optional[bool]
 
 
 class SensorRequestPatch(BaseModel):
     baixo: Optional[float]
     medio: Optional[float]
     alta: Optional[float]
-    active: Optional[bool]
