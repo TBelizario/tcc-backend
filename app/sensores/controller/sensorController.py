@@ -39,7 +39,7 @@ class sensorController(baseController):
         return sensor
 
     def list_maps(self):
-        sensores = self.db.query(self.main_model).all()
+        sensores = self.db.query(self.main_model).filter(self.main_model.active == True).all()
         list_response = []
         for sensor in sensores:
             last_distance = sensor.leituras[-1].valor if sensor.leituras else 0
